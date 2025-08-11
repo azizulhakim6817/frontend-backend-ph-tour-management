@@ -1,0 +1,49 @@
+1. <Outlet /> হলো React Router এর একটি কম্পোনেন্ট, যা আপনি তখন ব্যবহার করেন 
+   যখন আপনার route এর ভিতরে child route থাকে।
+   
+2. 🧠 সংক্ষিপ্তভাবে:
+➡️ <Outlet /> হচ্ছে placeholder যেটা child routes গুলোকে display করে।
+
+3. import React from "react";
+import ReactDOM from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import router from "./router"; // আপনি যেখানে router রেখেছেন
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
+
+
+4. const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />, // Layout এ <Outlet /> থাকবে
+    children: [
+      {
+        path: "",
+        element: <Home />
+      },
+      {
+        path: "about",
+        element: <About />
+      }
+    ]
+  }
+]);
+
+5. layout-> commonLayout.js -------------------------------------------------
+import type { ReactNode } from "react";
+
+interface IPors{
+    children: ReactNode
+}
+
+const CommnLayout = ({ children }: IPors) => {
+  return <div>{children}</div>;
+};
+export default CommnLayout;
+
+
+2. Navbar -> custom slipt 

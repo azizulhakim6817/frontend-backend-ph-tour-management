@@ -1,0 +1,38 @@
+1. Backend => Moduler MVC pattern --> 
+2. Fronntend => structure -> 
+
+3. |Auth |
+   |state-> local, remute, data fatching 
+   |views -> row css / materrial_UI / shaden /
+   | Design -> Hedles / react aria 
+
+4. React state management : 
+   1. zustunt
+   2. redux
+   3. tanStack
+   4. RTK_Query
+
+5. Auth : 
+   1. social
+   2. customs
+   3. email / password
+
+   4. backend -> passport -> handler
+
+   5. Firebase ------
+   6. Betterauth
+
+6. session base + token base + 
+
+7. http secure -> cookie -> 
+
+
+
+35-4-----------------------------------------------------------------------
+
+1. git clone https://github.com/Apollo-Level2-Web-Dev/ph-tour-management-system-frontend.git 
+   --branch part-8
+
+2. package-lock-json ---> npm  use---
+   --> npm install
+   --> 

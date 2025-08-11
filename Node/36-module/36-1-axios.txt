@@ -1,0 +1,4 @@
+1. axios ------------------------------------------------->>
+   1. lib---> axios.ts --> create----------------------->
+   2. feature--> axiosBaseQuery.ts---->path pattern------> 
+   3. use ---> baseApi --->  baseQuery: axiosBaseQuery(),

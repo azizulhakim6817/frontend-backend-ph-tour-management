@@ -1,0 +1,28 @@
+35-1------------------------------------
+1. tour 
+2. Role base: admin/user-views
+3. Tach : 
+   -> react --> react-router -> redux-RTK_Query, TS.
+   -> shadecn + originUI
+
+36-2---------------------------------
+
+1. mono repo -> 
+   ==> 1_repo ---> frontend + backend 
+   => client _app + server _app 
+   ==> Docker
+
+2. poly repo -> multi_repo ==>  Repo_frontend ---> Repo_Backend
+
+   ---> cors => origin : backend_URL
+
+3. Architecture : 
+   --> Microservice : payment : user : connect to frontend sent
+       subscription : 
+      1-> heaker --user --> DDOS attact -> down -->
+      
+   --> Monolith : 
+       1. single base 
+       2. Database
+       3. Deployment --> docker
+    --> CI / CD : pipline

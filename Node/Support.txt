@@ -1,0 +1,23 @@
+1. Firebase ki course dekabe and altanetive use ki ?
+
+2. cc --> controll + P --> Configure User Snippet --> typescriptreact
+    "TS React Component": {
+  "prefix": "cc",
+  "body": [
+    "import React from \"react\";",
+    "",
+    "export default function ${1:ComponentName}(): JSX.Element {",
+    "  return (",
+    "    <div>",
+    "      <h1>Hello</h1>",
+    "    </div>",
+    "  );",
+    "}"
+  ],
+  "description": "TS React component"
+}
+
+3. Registation ---> div --> error()-----------------------------------------> 
+3. Login ---> err --> error()-----------------------------------------> 
+
+4. my email PH-hero email is received ---Squid Game --> form ki????????????
