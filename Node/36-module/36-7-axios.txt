@@ -1,0 +1,174 @@
+1.🎃 axios হলো একটি JavaScript HTTP client library যা ব্রাউজার এবং Node.js — দুই জায়গাতেই ব্যবহার করা যায়, মূলত API থেকে ডেটা নেওয়া বা API-তে ডেটা পাঠানোর জন্য।
+তুমি একে fetch এর একটা সহজ ও বেশি সুবিধাজনক সংস্করণ ভাবতে পারো।
+
+2. 🔹 Axios দিয়ে GET Request
+
+3. 🔹 Axios দিয়ে POST Request
+
+5. 🔹 কেন Axios জনপ্রিয়?
+fetch এর তুলনায় সহজ সিনট্যাক্স
+JSON অটোমেটিক কনভার্ট করে
+Request/Response interceptors আছে
+পুরনো ব্রাউজারেও কাজ করে
+টাইমআউট, ক্যানসেল রিকোয়েস্ট ইত্যাদি সুবিধা
+
+
+1. 😁😀 public folder --> .env --------------------------------->
+VITE_BASE_URL=http://localhost:5000/api/v1
+
+
+2. 😁😀 public folder --> src ---> config ---> index.ts--------->
+VITE_BASE_URL=http://localhost:5000/api/v1
+
+
+3. 😁😀 folder- lib---> axios.ts ------> instance create -------------->
+
+//*****************************************************************************
+import config from "@/config";
+import axios from "axios";
+
+export const axiosInstance = axios.create({
+  baseURL: config.baseURL,
+});
+
+// Add a request interceptor
+axiosInstance.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+axiosInstance.interceptors.response.use(
+  function onFulfilled(response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  },
+  function onRejected(error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  }
+);
+
+
+4.😁😂 redux ---> axiosBaseQuery.ts -------------------------------------> 
+   ---> redux toolkit ---> 
+   ---> Axios baseQuery : ------------------------> 
+
+🧨🧨🎇axiosBaseQuery সাধারণত Redux Toolkit Query (RTK Query) এর সাথে ব্যবহার করা হয় যাতে Axios দিয়ে API কল হ্যান্ডেল করা যায়।
+RTK Query ডিফল্টভাবে fetchBaseQuery দেয়, কিন্তু যদি তুমি Axios ব্যবহার করতে চাও, তাহলে কাস্টম baseQuery ফাংশন লিখতে হয় — সেটাই সাধারণত axiosBaseQuery নামে রাখা হয়।
+
+🔹 কাজের ধারণা
+Axios কে wrapper করে একটা ফাংশন বানানো হয়।
+সেই ফাংশন RTK Query এর baseQuery হিসেবে সেট করা হয়।
+এর মাধ্যমে সব endpoint একই Axios instance/config শেয়ার করে।
+
+🔹 সুবিধা
+সব API রিকোয়েস্টে Axios এর সুবিধা পাওয়া যাবে (interceptors, timeout, cancel token ইত্যাদি)।
+এক জায়গা থেকে base URL, headers, authentication token হ্যান্ডেল করা যায়।
+RTK Query এর সাথে seamless integration।
+
+🧶🎃🎊 redux ---> axiosBaseQuery.ts--------------------------------------------------------->
+
+import { axiosInstance } from "@/lib/axios";
+import type { BaseQueryFn } from "@reduxjs/toolkit/query";
+import type { AxiosError, AxiosRequestConfig } from "axios";
+
+const axiosBaseQuery =
+  (
+    { baseUrl }: { baseUrl: string } = { baseUrl: "" }
+  ): BaseQueryFn<
+    {
+      url: string;
+      method?: AxiosRequestConfig["method"];
+      data?: AxiosRequestConfig["data"];
+      params?: AxiosRequestConfig["params"];
+      headers?: AxiosRequestConfig["headers"];
+    },
+    unknown,
+    unknown
+  > =>
+  async ({ url, method, data, params, headers }) => {
+    try {
+      const result = await axiosInstance({
+        url: url,
+        method,
+        data,
+        params,
+        headers,
+      });
+      return { data: result.data };
+    } catch (axiosError) {
+      const err = axiosError as AxiosError;
+      return {
+        error: {
+          status: err.response?.status,
+          data: err.response?.data || err.message,
+        },
+      };
+    }
+  };
+export default axiosBaseQuery;
+
+
+
+🧶 RTK Query API setup ----------------------------------------------------------> 
+import { baseApi } from "@/redux/basesApi";
+const authApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    register: builder.mutation({
+      query: (userInfo) => ({
+        url: "/user/register",
+        method: "POST",
+        data: userInfo,
+      }),
+    }),
+  }),
+});
+export const { useRegisterMutation } = authApi;
+
+
+
+😁😁😀😀😀 unwrap()*************************************************************
+
+unwrap() মূলত Redux Toolkit এর async thunk বা RTK Query মিউটেশন/কোয়েরি কলের পরে ব্যবহার করা হয়, যাতে রিটার্ন হওয়া রেজাল্টকে সরাসরি অ্যাক্সেস করা যায় এবং error হলে সেটা promise reject আকারে ধরা যায়।
+🔹 কোথায় ব্যবহার হয়?
+createAsyncThunk এর dispatch এর পরে।
+RTK Query mutation/query কলের পরে।
+
+🧢👑unwrap() ছাড়া dispatch করার পর result { type, payload, meta } এর মতো হবে।
+unwrap() দিলে সরাসরি payload বা error throw হবে।
+
+🔹 unwrap() কেন দরকার?
+ডিফল্ট dispatch async thunk result কে fulfilled/rejected object হিসেবে দেয়।
+unwrap() সেই promise কে resolve (payload) বা reject (error) করে দেয়।
+এতে try/catch এর মাধ্যমে সরাসরি error handle করা যায়।
+
+
+😁😁😀😀😀 shadcn --> Sooner *****************************************************
+1. install --> bun add sonner next-themes
+
+2. main.tsx---------------------------------------------->
+import { Toaster } from "@/components/ui/sonner";
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ReduxProvider store={store}>
+        <RouterProvider router={router} />
+        <Toaster richColors />
+      </ReduxProvider>
+    </ThemeProvider>
+  </StrictMode>
+
+
+3. user ---> import { toast } from "sonner"----
+
+
+😁😁😀😀😀 *****************************************************

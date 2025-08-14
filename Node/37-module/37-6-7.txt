@@ -1,0 +1,22 @@
+😀😁37-6 ***** cookies() ************************************************
+1. Localstorage -> browser recresh token() -- clear token
+
+2. Session storage -> browser recresh token() -- clear token
+
+3. http only cookies() --> set to token ---> security parpers
+
+😁😀**** 37-7 ***********************************************************
+1. axios.ts --> 
+   withCredentials: true
+   Note: Refresh token of Chrome browser(any browser) is delete 
+
+2. backend --> login --> utility folder --> setCookies.ts ------------------------------
+   >>> secure: true
+
+3. backend --->checkAuth.ts ---> accessToken----->
+      const accessToken =
+        req.headers.authorization || req.cookies.accessToken(); 
+
+4. frontend ---> 
+     const { data } = useUserInfoQuery(undefined);
+     console.log(data);
